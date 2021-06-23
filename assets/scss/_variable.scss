@@ -1,0 +1,67 @@
+// COLORS
+// @inlcude cl(black);
+//--------------------------------------------------
+
+$colors: (
+  white: #fff,
+  black: #000,
+  grey: #707070,
+  bg: #ebebeb,
+  text: #383838,
+);
+
+@function cl($key) {
+  @return map-get($colors, $key);
+}
+
+// FONT SIZE
+// @inlcude fs(normal);
+//--------------------------------------------------
+
+$font-sizes: (
+  h1: 48px,
+  h2: 32px,
+  h3: 24px,
+  normal: 16px,
+  tiny: 14px,
+  verytiny: 12px,
+);
+
+@function fs($key) {
+  @return map-get($font-sizes, $key);
+}
+
+// RESPONSIVE
+// @include overTab
+//--------------------------------------------------
+
+@mixin overMobile {
+  @media print, screen and (min-width: 425px) {
+    @content;
+  }
+}
+@mixin overTab {
+  @media print, screen and (min-width: 768px) {
+    @content;
+  }
+}
+@mixin overLaptop {
+  @media print, screen and (min-width: 1024px) {
+    @content;
+  }
+}
+@mixin overLaptopL {
+  @media print, screen and (min-width: 1440px) {
+    @content;
+  }
+}
+
+// FLEX
+// @include flex(center, center);
+//--------------------------------------------------
+
+@mixin flex($justify-content: unset, $align-items: unset) {
+  display: flex;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
