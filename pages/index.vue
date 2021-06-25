@@ -1,10 +1,16 @@
 <template>
   <div class="container">
-    <div class="pref-list">
-      <label v-for="(v, k) in prefectures" :key="k"
-        ><input type="checkbox" />{{ v }}</label
-      >
-    </div>
+    <ul class="pref-list">
+      <li v-for="(v, k) in prefectures" :key="'pref-' + k">
+        <base-checkbox :label="v" :check="(c) => {}" />
+      </li>
+      <li
+        v-for="n of Object.keys(prefectures).length > 0
+          ? Object.keys(prefectures).length - 1
+          : 0"
+        :key="'empty-' + n"
+      ></li>
+    </ul>
   </div>
 </template>
 <script>
@@ -21,3 +27,19 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="scss">
+.pref-list {
+  @include flex(center, unset);
+  flex-wrap: wrap;
+  max-width: w(tab);
+  margin: 0 auto;
+  li {
+    width: 100px;
+    margin-bottom: 6px;
+    &:empty {
+      margin-bottom: 0;
+    }
+  }
+}
+</style>
