@@ -35,7 +35,7 @@ export default {
   max-width: w(tab);
   margin: 0 auto;
   li {
-    width: 100px;
+    width: 90px;
     margin-bottom: 6px;
     &:empty {
       margin-bottom: 0;
