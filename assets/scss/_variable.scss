@@ -31,27 +31,42 @@ $font-sizes: (
   @return map-get($font-sizes, $key);
 }
 
+// WIDTH
+// @inlcude w(mobile);
+//--------------------------------------------------
+
+$width: (
+  mobile: 425px,
+  tab: 768px,
+  laptop: 1024px,
+  laptopl: 1440px,
+);
+
+@function w($key) {
+  @return map-get($width, $key);
+}
+
 // RESPONSIVE
 // @include overTab
 //--------------------------------------------------
 
 @mixin overMobile {
-  @media print, screen and (min-width: 425px) {
+  @media print, screen and (min-width: w(mobile)) {
     @content;
   }
 }
 @mixin overTab {
-  @media print, screen and (min-width: 768px) {
+  @media print, screen and (min-width: w(tab)) {
     @content;
   }
 }
 @mixin overLaptop {
-  @media print, screen and (min-width: 1024px) {
+  @media print, screen and (min-width: w(laptop)) {
     @content;
   }
 }
 @mixin overLaptopL {
-  @media print, screen and (min-width: 1440px) {
+  @media print, screen and (min-width: w(laptopl)) {
     @content;
   }
 }
