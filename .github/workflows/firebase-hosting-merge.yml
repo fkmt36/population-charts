@@ -17,6 +17,7 @@ jobs:
           envkey_API_URL: ${{ secrets.API_URL }}
           envkey_API_KEY: ${{ secrets.API_KEY }}
       - run: yarn install --frozen-lockfile && yarn generate
+      - run: yarn test
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
