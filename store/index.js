@@ -1,10 +1,14 @@
 export const state = () => ({
   prefectures: {},
+  populations: {},
 })
 
 export const mutations = {
   setPrefectures(state, prefs) {
     state.prefectures = { ...prefs }
+  },
+  setPopulations(state, pops) {
+    state.populations = { ...pops }
   },
 }
 
@@ -18,5 +22,14 @@ export const actions = {
         return acc
       }, {})
     )
+  },
+  async fetchPopulationByPrefCode({ state, commit }, prefCode) {
+    const { result } = await this.$axios.$get(
+      `/population/composition/perYear?prefCode=${prefCode}`
+    )
+    commit('setPopulations', {
+      ...state.populations,
+      [prefCode]: result.data[0].data,
+    })
   },
 }
