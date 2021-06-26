@@ -20,108 +20,26 @@
     <!-- 人口構成グラフ -->
     <section class="popu-section">
       <div class="popu-section-inner">
-        <highcharts :options="chartOptions"></highcharts>
+        <the-population-chart :series="series" />
       </div>
     </section>
   </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { Chart } from 'highcharts-vue'
-import Highcharts from 'highcharts'
+
 export default {
-  components: {
-    highcharts: Chart,
-  },
   data() {
     return {
-      // 選択した都道府県リスト（選択した順番を保持するため配列）
+      // selectedPrefs 選択した都道府県リスト（選択した順番を保持するため配列）
       selectedPrefs: [],
-      // Highchartsの設定
-      chartOptions: {
-        chart: {
-          spacingTop: 50,
-          spacingLeft: -35,
-        },
-        title: {
-          text: '',
-        },
-        xAxis: {
-          title: {
-            text: '年度',
-            align: 'high',
-            x: 32,
-            y: -18,
-          },
-        },
-        yAxis: {
-          title: {
-            text: '人口数',
-            align: 'high',
-            x: 45,
-            y: -25,
-            rotation: 0,
-          },
-
-          labels: {
-            x: -5,
-            formatter() {
-              return Highcharts.numberFormat(this.value, 0, '.', '')
-            },
-          },
-        },
-        legend: {
-          align: 'right',
-          verticalAlign: 'top',
-          layout: 'vertical',
-        },
-        series: [],
-        responsive: {
-          rules: [
-            {
-              condition: {
-                maxWidth: 600,
-              },
-              chartOptions: {
-                chart: {
-                  spacingLeft: -35,
-                },
-                xAxis: {
-                  title: {
-                    align: 'high',
-                    x: 0,
-                    y: 0,
-                  },
-                },
-                yAxis: {
-                  title: {
-                    align: 'high',
-                    x: 45,
-                    y: -25,
-                    rotation: 0,
-                  },
-                  labels: {
-                    align: 'left',
-                    x: 0,
-                    y: -2,
-                  },
-                },
-                legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom',
-                },
-              },
-            },
-          ],
-        },
-      },
     }
   },
   computed: {
     ...mapState(['prefectures', 'populations']),
+
+    // series Highchartsのためにデータを整形
     series() {
-      // Highchartsのためにデータを整形
       return this.selectedPrefs.map((v) => {
         return {
           name: this.prefectures[v],
@@ -130,17 +48,13 @@ export default {
       })
     },
   },
-  watch: {
-    series() {
-      this.chartOptions.series = this.series
-    },
-  },
   async created() {
     await this.fetchPrefectures()
   },
   methods: {
     ...mapActions(['fetchPrefectures', 'fetchPopulationByPrefCode']),
-    // 選択した都道府県をselectedPrefに追加（削除）
+
+    // selectPref 選択した都道府県をselectedPrefに追加（削除）
     async selectPref(prefCode, checked) {
       if (checked) {
         // 人口データがなければfetchする
