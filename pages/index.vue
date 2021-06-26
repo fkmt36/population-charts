@@ -41,7 +41,7 @@ export default {
       chartOptions: {
         chart: {
           spacingTop: 50,
-          // spacingLeft: -45,
+          spacingLeft: -35,
         },
         title: {
           text: '',
@@ -57,10 +57,10 @@ export default {
         yAxis: {
           title: {
             text: '人口数',
-            align: 'middle',
-            rotation: -90,
-            x: 0,
-            y: 0,
+            align: 'high',
+            x: 45,
+            y: -25,
+            rotation: 0,
           },
 
           labels: {
