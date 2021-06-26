@@ -1,63 +1,60 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">population-charts</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+  <div>
+    <section class="pref-section">
+      <div class="pref-section-inner">
+        <h2>都道府県</h2>
+        <ul class="pref-list">
+          <li v-for="(v, k) in prefectures" :key="'pref-' + k">
+            <base-checkbox :label="v" :check="(c) => {}" />
+          </li>
+          <li
+            v-for="n of Object.keys(prefectures).length > 0
+              ? Object.keys(prefectures).length - 1
+              : 0"
+            :key="'empty-' + n"
+          ></li>
+        </ul>
       </div>
-    </div>
+    </section>
   </div>
 </template>
-
 <script>
-export default {}
+import { mapState, mapActions } from 'vuex'
+export default {
+  computed: {
+    ...mapState(['prefectures']),
+  },
+  async created() {
+    await this.fetchPrefectures()
+  },
+  methods: {
+    ...mapActions(['fetchPrefectures']),
+  },
+}
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+<style scoped lang="scss">
+.pref-section {
+  .pref-section-inner {
+    max-width: w(tab);
+    margin: 0 auto;
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+    h2 {
+      font-size: fs(normal);
+      margin-bottom: 10px;
+    }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+    .pref-list {
+      @include flex(center, unset);
+      flex-wrap: wrap;
+      li {
+        width: 90px;
+        margin-bottom: 6px;
+        &:empty {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }
 </style>
