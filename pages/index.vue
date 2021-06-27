@@ -20,7 +20,7 @@
     <!-- 人口構成グラフ -->
     <section class="popu-section">
       <div class="popu-section-inner">
-        <the-population-chart :series="series" />
+        <the-population-chart />
       </div>
     </section>
   </div>
@@ -31,16 +31,6 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState(['prefectures', 'populations', 'selectedPrefs']),
-
-    // series Highchartsのためにデータを整形
-    series() {
-      return this.selectedPrefs.map((v) => {
-        return {
-          name: this.prefectures[v],
-          data: this.populations[v].map((p) => [p.year, p.value]),
-        }
-      })
-    },
   },
   async created() {
     await this.fetchPrefectures()

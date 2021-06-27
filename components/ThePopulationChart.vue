@@ -3,19 +3,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 
 export default {
   components: {
     highcharts: Chart,
-  },
-  props: {
-    series: {
-      type: Array,
-      default: () => [],
-      required: true,
-    },
   },
   data() {
     return {
@@ -103,6 +97,18 @@ export default {
         },
       },
     }
+  },
+  computed: {
+    ...mapState(['prefectures', 'populations', 'selectedPrefs']),
+    // series Highchartsのためにデータを整形
+    series() {
+      return this.selectedPrefs.map((v) => {
+        return {
+          name: this.prefectures[v],
+          data: this.populations[v].map((p) => [p.year, p.value]),
+        }
+      })
+    },
   },
   watch: {
     series() {
