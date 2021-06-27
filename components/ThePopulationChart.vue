@@ -11,9 +11,11 @@ export default {
   components: {
     highcharts: Chart,
   },
-  data() {
-    return {
-      chartOptions: {
+  computed: {
+    ...mapState(['prefectures', 'populations', 'selectedPrefs']),
+
+    chartOptions() {
+      return {
         chart: {
           spacingTop: 65,
           spacingLeft: -35,
@@ -55,7 +57,12 @@ export default {
           verticalAlign: 'top',
           layout: 'vertical',
         },
-        series: [],
+        series: this.selectedPrefs.map((v) => {
+          return {
+            name: this.prefectures[v],
+            data: this.populations[v].map((p) => [p.year, p.value]),
+          }
+        }),
         responsive: {
           rules: [
             {
@@ -95,24 +102,7 @@ export default {
             },
           ],
         },
-      },
-    }
-  },
-  computed: {
-    ...mapState(['prefectures', 'populations', 'selectedPrefs']),
-    // series Highchartsのためにデータを整形
-    series() {
-      return this.selectedPrefs.map((v) => {
-        return {
-          name: this.prefectures[v],
-          data: this.populations[v].map((p) => [p.year, p.value]),
-        }
-      })
-    },
-  },
-  watch: {
-    series() {
-      this.chartOptions.series = this.series
+      }
     },
   },
 }
