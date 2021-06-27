@@ -1,6 +1,8 @@
 export const state = () => ({
   prefectures: {},
   populations: {},
+  // selectedPrefs 選択した都道府県リスト（選択した順番を保持するため配列）
+  selectedPrefs: [],
 })
 
 export const mutations = {
@@ -9,6 +11,12 @@ export const mutations = {
   },
   setPopulations(state, pops) {
     state.populations = { ...pops }
+  },
+  addSelectedPrefs(state, prefCode) {
+    state.selectedPrefs.push(prefCode)
+  },
+  removeSelectedPrefs(state, prefCode) {
+    state.selectedPrefs = state.selectedPrefs.filter((c) => c !== prefCode)
   },
 }
 

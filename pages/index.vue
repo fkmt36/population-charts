@@ -26,17 +26,11 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
-  data() {
-    return {
-      // selectedPrefs 選択した都道府県リスト（選択した順番を保持するため配列）
-      selectedPrefs: [],
-    }
-  },
   computed: {
-    ...mapState(['prefectures', 'populations']),
+    ...mapState(['prefectures', 'populations', 'selectedPrefs']),
 
     // series Highchartsのためにデータを整形
     series() {
@@ -52,6 +46,7 @@ export default {
     await this.fetchPrefectures()
   },
   methods: {
+    ...mapMutations(['addSelectedPrefs', 'removeSelectedPrefs']),
     ...mapActions(['fetchPrefectures', 'fetchPopulationByPrefCode']),
 
     // selectPref 選択した都道府県をselectedPrefに追加（削除）
@@ -60,9 +55,9 @@ export default {
         // 人口データがなければfetchする
         if (!(prefCode in this.populations))
           await this.fetchPopulationByPrefCode(prefCode)
-        this.selectedPrefs.push(prefCode)
+        this.addSelectedPrefs(prefCode)
       } else {
-        this.selectedPrefs = this.selectedPrefs.filter((c) => c !== prefCode)
+        this.removeSelectedPrefs(prefCode)
       }
     },
   },
