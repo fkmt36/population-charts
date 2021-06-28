@@ -15,11 +15,15 @@
     </section>
   </div>
 </template>
-
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  async asyncData({ store }) {
-    await store.dispatch('fetchPrefectures')
+  async created() {
+    await this.fetchPrefectures()
+  },
+  methods: {
+    ...mapActions(['fetchPrefectures']),
   },
 }
 </script>
