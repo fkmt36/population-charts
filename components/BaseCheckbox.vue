@@ -1,11 +1,9 @@
 <template>
-  <div class="base-checkbox">
-    <label
-      ><input type="checkbox" @change="(e) => check(e.target.checked)" />{{
-        label
-      }}</label
-    >
-  </div>
+  <label
+    ><input type="checkbox" @change="(e) => check(e.target.checked)" />{{
+      label
+    }}</label
+  >
 </template>
 
 <script>
