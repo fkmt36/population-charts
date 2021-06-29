@@ -9,8 +9,7 @@ localVue.use(Vuex)
 
 // Storeに関するテスト
 describe('index store', () => {
-  // fetchPrefecturesを実行すると都道府県リストがprefecturesにセットされるか？
-  test('fetchPrefectures should mutate prefectures', async () => {
+  test('fetchPrefecturesを実行すると都道府県リストがprefecturesにセットされる', async () => {
     const inputData = {
       message: null,
       result: [
@@ -29,5 +28,54 @@ describe('index store', () => {
     store.$axios.$get = jest.fn(() => Promise.resolve(inputData))
     await store.dispatch('fetchPrefectures')
     expect(store.state.prefectures).toEqual(outputData)
+  })
+
+  test('etchPopulationByPrefCodeを実行すると人口データがpopulationsにセットされる', async () => {
+    const prefCode = 1
+    const inputData = {
+      message: null,
+      result: {
+        boundaryYear: 2015,
+        data: [
+          {
+            label: '総人口',
+            data: [
+              { year: 1960, value: 5039206 },
+              { year: 1965, value: 5171800 },
+              { year: 1970, value: 5184287 },
+            ],
+          },
+        ],
+      },
+    }
+    const outputData = {
+      [prefCode]: [
+        { year: 1960, value: 5039206 },
+        { year: 1965, value: 5171800 },
+        { year: 1970, value: 5184287 },
+      ],
+    }
+    const store = new Vuex.Store(cloneDeep(storeIndex))
+    store.$axios = axios
+    store.$axios.$get = jest.fn(() => Promise.resolve(inputData))
+    await store.dispatch('fetchPopulationByPrefCode', prefCode)
+    expect(store.state.populations).toEqual(outputData)
+  })
+
+  test('addSelectedPrefsを実行するとselectedPrefsにprefCodeが追加される', () => {
+    const inputData = '1'
+    const outputData = ['1']
+    const store = new Vuex.Store(cloneDeep(storeIndex))
+    store.commit('addSelectedPrefs', inputData)
+    expect(store.state.selectedPrefs).toEqual(outputData)
+  })
+
+  test('removeSelectedPrefsを実行するとselectedPrefsからprefCodeが削除される', () => {
+    const inputData = '1'
+    const outputData = []
+    const store = new Vuex.Store(cloneDeep(storeIndex))
+    store.state.selectedPrefs = [inputData]
+    store.commit('removeSelectedPrefs', inputData)
+    expect(store.state.selectedPrefs).toEqual(outputData)
   })
 })
