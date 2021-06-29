@@ -1,29 +1,24 @@
 <template>
   <div>
+    <!-- 都道府県一覧 -->
     <section class="pref-section">
       <div class="pref-section-inner">
         <h2>都道府県</h2>
-        <ul class="pref-list">
-          <li v-for="(v, k) in prefectures" :key="'pref-' + k">
-            <base-checkbox :label="v" :check="(c) => {}" />
-          </li>
-          <li
-            v-for="n of Object.keys(prefectures).length > 0
-              ? Object.keys(prefectures).length - 1
-              : 0"
-            :key="'empty-' + n"
-          ></li>
-        </ul>
+        <the-prefecture-list />
+      </div>
+    </section>
+    <!-- 人口構成グラフ -->
+    <section class="popu-section">
+      <div class="popu-section-inner">
+        <the-population-chart />
       </div>
     </section>
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
+
 export default {
-  computed: {
-    ...mapState(['prefectures']),
-  },
   async created() {
     await this.fetchPrefectures()
   },
@@ -43,18 +38,12 @@ export default {
       font-size: fs(normal);
       margin-bottom: 10px;
     }
-
-    .pref-list {
-      @include flex(center, unset);
-      flex-wrap: wrap;
-      li {
-        width: 90px;
-        margin-bottom: 6px;
-        &:empty {
-          margin-bottom: 0;
-        }
-      }
-    }
+  }
+}
+.popu-section {
+  .popu-section-inner {
+    max-width: w(laptop);
+    margin: 0 auto;
   }
 }
 </style>

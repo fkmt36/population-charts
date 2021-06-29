@@ -1,50 +1,25 @@
-import { mount, createLocalVue } from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Index from '@/pages/index.vue'
-import BaseCheckbox from '@/components/BaseCheckbox.vue'
+import ThePrefectureList from '@/components/ThePrefectureList.vue'
+import ThePopulationChart from '@/components/ThePopulationChart.vue'
 import Vuex from 'vuex'
+import { test } from '@jest/globals'
+import { cloneDeep } from 'lodash'
+import * as storeIndex from '~/store/index'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
-localVue.component('BaseCheckbox', BaseCheckbox)
+localVue.component('ThePrefectureList', ThePrefectureList)
+localVue.component('ThePopulationChart', ThePopulationChart)
 
 describe('index', () => {
-  test('created should call fetchPrefectures', () => {
-    const actions = {
-      fetchPrefectures: jest.fn(),
-    }
-    const store = new Vuex.Store({
-      state: { prefectures: {} },
-      actions,
+  test('アクセスするとfetchPrefecturesが実行される', () => {
+    storeIndex.actions.fetchPrefectures = jest.fn()
+    const store = new Vuex.Store(cloneDeep(storeIndex))
+    shallowMount(Index, {
+      store,
+      localVue,
     })
-    mount(Index, { store, localVue })
-    expect(actions.fetchPrefectures).toHaveBeenCalled()
-  })
-  test('empty prefectures should show empty pref-list', () => {
-    const store = new Vuex.Store({
-      state: {
-        prefectures: {},
-      },
-      actions: {
-        fetchPrefectures: jest.fn(),
-      },
-    })
-    const wrapper = mount(Index, { store, localVue })
-    const prefList = '<ul class="pref-list"> </ul>'
-    expect(wrapper.html()).toContain(prefList)
-  })
-  test('not empty prefectures should show pref-list', () => {
-    const store = new Vuex.Store({
-      state: {
-        prefectures: {
-          1: '北海道',
-        },
-      },
-      actions: {
-        fetchPrefectures: jest.fn(),
-      },
-    })
-    const wrapper = mount(Index, { store, localVue })
-    const prefList = '<input type="checkbox">北海道</label></div>'
-    expect(wrapper.html()).toContain(prefList)
+    expect(storeIndex.actions.fetchPrefectures).toHaveBeenCalled()
   })
 })
